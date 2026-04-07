@@ -272,6 +272,7 @@ function aom_wrench.take_item(player, itemname, count)
     local inv = player:get_inventory()
     for i=0, inv:get_size("main") do
         local stack = inv:get_stack("main", i)
+        stack = ItemStack(stack)
         if stack:get_name() == itemname and stack:get_count() >= (count or 1) then
             if (count == nil) or pi.creative then return true end -- don't use items if in creative
             stack:take_item(count)

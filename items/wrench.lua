@@ -6,10 +6,10 @@ aom_wrench.max_dist = 16
 local function abandon_build(player)
     local pi = aom_wrench.check_player(player)
     pi.place_mode = 0
-    aom_wrench.hide_entity(player, 1)
+    -- aom_wrench.hide_entity(player, 1)
     aom_wrench.hide_entity(player, 2)
     pi.pos2 = nil
-    pi.pos1 = nil
+    -- pi.pos1 = nil
     pi.build_list = nil
     pi.build_index = nil
 end
@@ -40,7 +40,6 @@ aom_wrench.prototype = {
             pi.place_mode = 1
             pi.build_list = nil
             pi.build_index = nil
-            aom_wrench.add_entity(pi.pos1, 1, player)
             aom_wrench.update_position(player, 1)
             aom_wrench.add_entity(pi.pos1, 2, player)
         end
@@ -99,7 +98,7 @@ aom_wrench.prototype = {
         pointed = pointed and vector.round(pointed)
 
         if pi.place_mode == 0 then
-            if at_node or ctrl.sneak then
+            if at_node or true then
                 pi.pos1 = pointed
                 aom_wrench.update_position(player, 1)
                 aom_wrench.show_entity(player, 1)
@@ -146,7 +145,7 @@ aom_wrench.prototype = {
             -- set the list of node positions to place at
             pi.build_list = (pi.node.name ~= "air" or creative) and nodelist
             pi.pos1, pi.pos2 = nil, nil
-            aom_wrench.hide_entity(player, 1)
+            -- aom_wrench.hide_entity(player, 1)
             aom_wrench.hide_entity(player, 2)
             if (not creative) and not aom_wrench.take_item(player, pi.node.name, nil) then
                 core.sound_play(("aom_wrench_not_allowed"), {
@@ -171,7 +170,7 @@ aom_wrench.prototype = {
         aom_wrench.do_building(player, dtime, itemstack)
     end,
     _on_select = function(itemstack, player)
-        aom_wrench.check_player(player)
+        local pi = aom_wrench.check_player(player)
         aom_wrench.update_hud(player)
     end,
     _on_deselect = function(itemstack, player)
