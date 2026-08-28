@@ -97,8 +97,8 @@ local function tex(name)
 end
 
 local textures = {
-	tex("aom_wrench_wrench_ENTITY.png^[multiply:#8df"),
-	tex("aom_wrench_wrench_ENTITY.png^[multiply:#ed8"),
+	tex("aom_wrench_wrench_ENTITY_64.png^[multiply:#ea6"),
+	tex("aom_wrench_wrench_ENTITY_64.png^[multiply:#58c"),
 }
 
 function aom_wrench.get_entity_texture(num)
@@ -110,8 +110,10 @@ local entity = {
 	initial_properties = {
 		physical = false,
 		textures = textures[1],
-		visual = "cube",
-		visual_size = {x=1.01, y=1.01},
+		backface_culling = false,
+		visual = "mesh",
+		mesh = "aom_wrench_outline.glb",
+		-- visual_size = {x=1.01, y=1.01},
 		collisionbox = {-0.2, -0.2, -0.2, 0.2, 0.2, 0.2,},
 		use_texture_alpha = true,
 		pointable = false,
@@ -148,7 +150,8 @@ function aom_wrench.add_entity(pos, ent_type, player)
 	local object = core.add_entity(pos, "aom_wrench:wrench_ENTITY")
 	local _tex = aom_wrench.get_entity_texture(ent_type)
 	object:set_properties({
-		textures = _tex
+		textures = _tex,
+		visual_size = ent_type==2 and vector.new(1.01, 1.01, 1.01) or vector.new(1, 1, 1),
 	})
 	if object.set_observers then
 		object:set_observers({
@@ -427,14 +430,68 @@ function aom_wrench.update_measurement_hud(player)
 	end
 end
 
-function aom_wrench.update_position(player, n)
+function aom_wrench.update_position(player, n, no_interpolation)
 	-- move the end marker
 	local pi = aom_wrench.check_player(player)
 	local pos = pi["pos"..n]
-	if pi.ent[n] then
+	if pos and pi.ent[n] then
 		pi.ent[n].object:set_pos(pos)
 	else
-		aom_wrench.add_entity(pos, n, player)
+		aom_wrench.add_entity(pos, 1, player)
 	end
 	aom_wrench.update_measurement_hud(player)
+
+	local ent = pi.ent[n]
+	if not ent then return end
+
+	local new_tex = textures[(pi.pos2 ~= nil) and 2 or 1]
+	if (pi.pos1 and pi.pos2) then
+		new_tex = textures[(n==1 and 2) or 1]
+	end
+	if (ent.object:get_properties().textures ~= new_tex) then
+		-- culling only on the "active" indicator
+		local culling
+		if pi.pos2 then
+			culling = (n~=1)
+		else
+			culling = false
+		end
+		ent.object:set_properties({
+			textures = new_tex,
+			backface_culling = culling
+		})
+	end
+
+	-- only apply to the main / first indicator
+	if n ~= 1 then return end
+
+	local bs = 10
+	local s = vector.new(0, 0, 0)
+	local E = (pi.pos2 or pi.pos1) - pi.pos1
+	s, E = aom_wrench.sort_positions(s, E)
+	-- these are the 8 corner bones
+	--x = -x, xx = +x etc
+	local bounds = {
+		xyz 	= vector.new(s.x, s.y, s.z) * bs,
+		xxyz 	= vector.new(E.x, s.y, s.z) * bs,
+		xyyz 	= vector.new(s.x, E.y, s.z) * bs,
+		xxyyz 	= vector.new(E.x, E.y, s.z) * bs,
+		xyzz 	= vector.new(s.x, s.y, E.z) * bs,
+		xxyzz 	= vector.new(E.x, s.y, E.z) * bs,
+		xyyzz 	= vector.new(s.x, E.y, E.z) * bs,
+		xxyyzz 	= vector.new(E.x, E.y, E.z) * bs,
+	}
+	for bone_name, offset in pairs(bounds) do
+		local override = ent.object:get_bone_override(bone_name)
+		local last_offset = override and override.position and override.position.vec
+		if (not last_offset) or (not offset:equals(last_offset)) then
+			ent.object:set_bone_override(bone_name, {
+				position = {
+					vec = offset,
+					-- absolute = true,
+					interpolation = no_interpolation and 0 or 0.1,
+				}
+			})
+		end
+	end
 end

@@ -1,11 +1,11 @@
 
-MIT License
-
-Copyright (c) 2023 Sumi, SumianVoice <info[at]sumianvoice.com> <https://content.luanti.org/users/Sumianvoice/>
+Copyright (c) 2026 Sumi, SumianVoice <info[at]sumianvoice.com> <https://content.luanti.org/users/Sumianvoice/>
 
 Permission to use, copy, modify, and/or distribute this software for any purpose
 with or without fee is hereby granted to the person(s) and/or legal entities listed
 in the above copyright notice.
+
+MIT License
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,14 +28,16 @@ SOFTWARE.
 ===
 Media Licenses
 ===
-Copyright (c) 2023 Sumi, SumianVoice <info[at]sumianvoice.com> <https://content.luanti.org/users/Sumianvoice/>
+Copyright (c) 2026 Sumi, SumianVoice <info[at]sumianvoice.com> <https://content.luanti.org/users/Sumianvoice/>
 License: CC-BY-4.0. <https://creativecommons.org/licenses/by/4.0/legalcode.txt>
 Files:
 aom_wrench.png
 aom_wrench_hud_bg.png
-aom_wrench_wrench_ENTITY.png
+aom_wrench_wrench_ENTITY_64.png
 
 aom_wrench_clicks.ogg
 aom_wrench_plip.ogg
 aom_wrench_not_allowed.ogg
+
+aom_wrench_outline.glb
 ===
