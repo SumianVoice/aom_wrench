@@ -1,3 +1,5 @@
+local mod_name = core.get_current_modname()
+local S = core.get_translator(mod_name)
 
 aom_wrench.pl = {}
 local pl = aom_wrench.pl
@@ -263,7 +265,7 @@ function aom_wrench.do_building_creative(player, dtime, itemstack)
 	local pi = aom_wrench.check_player(player)
 	if pi.build_list then
 		core.bulk_set_node(pi.build_list, pi.node)
-		aom_wrench.chat_send_player(player, core.colorize("#aaa", "Finished building!"))
+		aom_wrench.chat_send_player(player, core.colorize("#aaa", S("Finished building!")))
 		pi.build_list = nil
 	end
 end
@@ -316,7 +318,7 @@ function aom_wrench.do_building(player, dtime, itemstack)
 		if not build_pos then
 			pi.build_list = nil
 			pi.build_index = nil
-			aom_wrench.chat_send_player(player, core.colorize("#aaa", "Finished building!"))
+			aom_wrench.chat_send_player(player, core.colorize("#aaa", S("Finished building!")))
 			core.sound_play(("aom_wrench_plip"), {
 				gain = 0.2,
 				pitch = 0.4,
@@ -336,16 +338,16 @@ function aom_wrench.do_building(player, dtime, itemstack)
 		local found_item = creative or aom_wrench.take_item(player, pi.node.name, 1)
 
 		if found_item then
-			-- don't dig buildable_to node unless in creative
+			-- don't dig buildable_to node when in creative
 			if (not creative) and (node.name ~= "air") then
 				core.dig_node(build_pos)
 			end
 			-- actually place the node
 			core.set_node(build_pos, pi.node)
 
-			-- don't oom
+			-- don't oom; only play sounds and do updates when not in creative
 			if (not creative) and core.get_modpath("node_updates") then
-				local node_updates = _G["node_updates"]
+				local node_updates = rawget(_G, "node_updates")
 				node_updates.cause_adjacent_update(build_pos, "place", player)
 				core.sound_play(("aom_wrench_plip"), {
 					gain = 0.1,

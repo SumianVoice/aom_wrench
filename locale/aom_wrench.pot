@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2026-08-28 18:56+1000\n"
+"POT-Creation-Date: 2026-08-28 19:18+1000\n"
 "PO-Revision-Date: 2025-08-22 22:12+1000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -44,4 +44,8 @@ msgstr ""
 
 #: items/wrench.lua:194
 msgid "In creative, will allow placing air, overwriting blocks, and instant placement"
+msgstr ""
+
+#: scripts/system.lua:268 scripts/system.lua:321
+msgid "Finished building!"
 msgstr ""
