@@ -206,7 +206,7 @@ core.register_tool("aom_wrench:wrench", {
 })
 
 if core.get_modpath("aom_tcraft") then
-	local aom_tcraft = _G["aom_tcraft"]
+	local aom_tcraft = rawget(_G, "aom_tcraft")
 	aom_tcraft.register_craft({
 		output = "aom_wrench:wrench",
 		items = {

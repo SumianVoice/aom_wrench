@@ -13,7 +13,8 @@ end
 local has_compatlib = core.get_modpath("compatlib") ~= nil
 local function hud_add(player, def)
 	if has_compatlib then
-		return _G.COMPAT.hud_add(player, def)
+		local COMPAT = rawget(_G, "COMPAT")
+		return COMPAT.hud_add(player, def)
 	else return player:hud_add(def) end
 end
 
@@ -52,7 +53,7 @@ end
 function aom_wrench.get_shell(player)
 	local creative = (player and core.is_creative_enabled(player:get_player_name()) or false)
 	if (not creative) and core.get_modpath("aom_gamemodes") then
-		local aom_gamemodes = _G["aom_gamemodes"]
+		local aom_gamemodes = rawget(_G, "aom_gamemodes")
 		creative = aom_gamemodes.player_has_tag(player, "creative")
 	end
 	return {
