@@ -445,7 +445,7 @@ function aom_wrench.update_position(player, n, no_interpolation)
 	aom_wrench.update_measurement_hud(player)
 
 	local ent = pi.ent[n]
-	if not ent then return end
+	if (not ent) or (not ent.object) or (not ent.object:get_pos()) then return end
 
 	local new_tex = textures[(pi.pos2 ~= nil) and 2 or 1]
 	if (pi.pos1 and pi.pos2) then
